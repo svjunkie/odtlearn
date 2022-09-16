@@ -32,6 +32,8 @@ class PrescriptiveTreeClassifier(TreeClassifier):
         inverse propensity weighting, direct method, and doubly robust methods, respectively
     num_threads: int, default=None
         The number of threads the solver should use
+    param_dict: nddict, default=None
+        Optional dictionary of parameters to be passed to gurobipy.Model.setParam()
 
     Attributes
     ----------
@@ -53,7 +55,7 @@ class PrescriptiveTreeClassifier(TreeClassifier):
         The values of decision variable p -- whether or not a tree's nodes branch or assign treatment
     """
 
-    def __init__(self, depth=1, time_limit=60, method="IPW", num_threads=None) -> None:
+    def __init__(self, depth=1, time_limit=60, method="IPW", num_threads=None, param_dict=None) -> None:
         # initialize base tree classifier
         super().__init__(depth, time_limit, num_threads)
 
@@ -193,7 +195,7 @@ class PrescriptiveTreeClassifier(TreeClassifier):
                 self.X_col_labels,
                 self.time_limit,
                 self.num_threads,
-                verbose,
+                verbose
             )
 
         elif self.method == "DM":
@@ -210,6 +212,7 @@ class PrescriptiveTreeClassifier(TreeClassifier):
                 self.time_limit,
                 self.num_threads,
                 verbose,
+                param_dict
             )
 
         elif self.method == "DR":
@@ -226,6 +229,7 @@ class PrescriptiveTreeClassifier(TreeClassifier):
                 self.time_limit,
                 self.num_threads,
                 verbose,
+                param_dict
             )
 
         self.grb_model.create_main_problem()

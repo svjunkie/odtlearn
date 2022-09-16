@@ -57,3 +57,4 @@ class ProblemFormulation(ABC):
         self.define_variables()
         self.define_constraints()
         self.define_objective()
+        self.define_params()

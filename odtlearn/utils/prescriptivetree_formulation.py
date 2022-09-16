@@ -18,6 +18,7 @@ class FlowOPT_Robust(ProblemFormulation):
         time_limit,
         num_threads,
         verbose,
+        param_dict
     ) -> None:
         """
         :param X: numpy matrix or pandas dataframe of covariates
@@ -32,6 +33,7 @@ class FlowOPT_Robust(ProblemFormulation):
         :param X_col_labels: a list of features in the covariate space X
         :param time_limit: The given time limit for solving the MIP
         :param num_threads: Number of threads for the solver to use
+        :param param_dict: Dictionary of paramaters to be passed to gurobipy.Model.setParam()
         """
         self.model_name = "FlowOPT"
         self.y_hat = y_hat
@@ -323,3 +325,8 @@ class FlowOPT_IPW(ProblemFormulation):
             obj.add(self.z[i, 1] * (self.y[i]) / self.ipw[i])
 
         self.model.setObjective(obj, GRB.MAXIMIZE)
+
+    def define_params(self):
+        # define model parameters from param_dict
+        for key in self.param_dict:
+            self.model.setParam(key, param_dict[key])
